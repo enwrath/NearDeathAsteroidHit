@@ -1,16 +1,20 @@
 <html>
   <head>
     <title>Nearest asteroid today</title>
-    <script src="asteroid.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <meta charset="UTF-8">
   </head>
   <body onload="init()">
-  	<div>
-  		<h1>Today, these asteroids are as close to Earth as their orbit allows:</h1>
-      <ul id="asteroidList">
+    <div id="asteroid">
+      <h1>Today, these asteroids are as close to Earth as their orbit allows:</h1>
+      <ul>
+        <li v-for="ast in asteroidList">
+          <a v-bind:href="ast.link">{{ ast.name }}</a> is only {{ ast.distance.toLocaleString() }} km from colliding with Earth!
+        </li>
       </ul>
-      <p id="deathMiss"></p>
-  	</div>
+      <p> {{ message }} </p>
+    </div>
+    <script src="asteroid.js"></script>
   </body>
   <footer>
     <hr>
