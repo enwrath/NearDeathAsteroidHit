@@ -1,12 +1,21 @@
+const distanceToMoon = 384400; // average distance from Earth
+const distanceToSun = 149600000; // again, on average
+
 var asteroid = new Vue({
   el: '#asteroid',
   data: {
     asteroidList: [],
-    message: "Loading NASA asteroid data..."
+    message: "Loading NASA asteroid data...",
+    toMoon: distanceToMoon / distanceToSun,
+    toSun: 1,
+    toAsteroid: 0
+  },
+  mounted: function() {
+    loadData();
   }
 })
 
-function init() {
+function loadData() {
   // Might not give right day if timezones and stuff, but whatever
   const date = new Date().toISOString().slice(0,10);
   // Supersecret apikey, pls no steal ;______;
@@ -34,6 +43,9 @@ function displayData(data, date) {
 
   asteroid.asteroidList = astDist;
   if (astDist.length > 0) {
+    // distances for visualization
+    asteroid.toAsteroid = astDist[0].distance / distanceToSun;
+
     // If Earth got hit by asteroid, nobody probably would read this anymore
     asteroid.message = `We missed destruction by mere ${astDist[0].distance.toLocaleString()} kilometers today!`
   } else {
