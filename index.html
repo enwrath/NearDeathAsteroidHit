@@ -2,6 +2,7 @@
   <head>
     <title>Nearest asteroid today</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="asteroid.css">
     <meta charset="UTF-8">
   </head>
   <body>
@@ -13,12 +14,12 @@
         </li>
       </ul>
       <p> {{ message }} </p>
-      <div v-show="toMoon > 0">
+      <div>
         <hr>
         {{ visList }}
         <p>Visualization of distance to asteroid with moon as the reference point. <br>
-        Celestial bodies not in scale.</p>
-        <canvas id="aCanvas" height="75"></canvas>
+        Celestial bodies not in scale. Celestial bodies also not perfectly lined up in reality.</p>
+        <canvas id="aCanvas"></canvas>
       </div>
     </div>
     <script src="asteroid.js"></script>

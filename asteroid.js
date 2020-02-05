@@ -6,34 +6,55 @@ var asteroid = new Vue({
     asteroidList: [],
     visList: [],
     message: "Loading NASA asteroid data...",
-    toMoon: 0,
     drawCanvas: null,
     canvasWidth: 0
   },
   mounted: function() {
     loadData();
     let c = document.getElementById("aCanvas");
-    this.canvasWidth = c.width;
+    this.canvasWidth = c.scrollWidth;
+    c.width = this.canvasWidth;
+    c.height = c.scrollHeight;
     let ctx = c.getContext("2d");
     this.drawCanvas = ctx;
   },
   methods: {
     canvasRepaint() {
-      // Asteroid should always be more far away, so put it at the very end of canvas
-      let aX = this.canvasWidth - 50;
+      let mX = this.canvasWidth - 50;
+      let maxDist = 0;
+      let minDist = 25;
+      let ax = 0;
+      // If no asteroid to visualize, moon is at the end
+      if (this.visList.length > 0) {
+        // Asteroid with max index is furthest away
+        let indexMax = Math.max(...this.visList);
+        // put it the end point of canvas
+        aX = this.canvasWidth - 50;
+        maxDist = this.asteroidList[indexMax].distance
 
-      let mX = aX * this.toMoon;
+        mX = aX * distanceToMoon / maxDist;
+      }
+
 
       this.drawCanvas.font = "12px Georgia";
-
       this.drawCanvas.fillStyle = 'gray';
       this.drawCanvas.fillRect(0, 0, this.canvasWidth, 100);
 
+
+      for (index in this.visList) {
+        let xPos = aX * this.asteroidList[this.visList[index]].distance / maxDist
+        this.drawCanvas.beginPath();
+        this.drawCanvas.arc(xPos, 25, 20, 0, 2 * Math.PI, false);
+        this.drawCanvas.fillStyle = 'black';
+        this.drawCanvas.fill();
+        this.drawCanvas.fillText(this.asteroidList[this.visList[index]].name, xPos-15, 55);
+      }
+
       this.drawCanvas.beginPath();
-      this.drawCanvas.arc(25, 25, 20, 0, 2 * Math.PI, false);
+      this.drawCanvas.arc(minDist, 25, 20, 0, 2 * Math.PI, false);
       this.drawCanvas.fillStyle = 'green';
       this.drawCanvas.fill();
-      this.drawCanvas.fillText("Earth", 10, 55);
+      this.drawCanvas.fillText("Earth", minDist-15, 55);
 
       this.drawCanvas.beginPath();
       this.drawCanvas.arc(mX, 25, 20, 0, 2 * Math.PI, false);
@@ -41,11 +62,6 @@ var asteroid = new Vue({
       this.drawCanvas.fill();
       this.drawCanvas.fillText("Moon", mX-15, 55);
 
-      this.drawCanvas.beginPath();
-      this.drawCanvas.arc(aX, 25, 20, 0, 2 * Math.PI, false);
-      this.drawCanvas.fillStyle = 'black';
-      this.drawCanvas.fill();
-      this.drawCanvas.fillText("Asteroid", aX-20, 55);
     },
     // Toggle visualization of asteroid[index]'s distance
     toggleVisualization(index) {
@@ -56,10 +72,6 @@ var asteroid = new Vue({
       else {
         this.visList.splice(i, 1);
       }
-    }
-  },
-  watch: {
-    toMoon: function() {
       this.canvasRepaint();
     }
   }
@@ -93,9 +105,8 @@ function displayData(data, date) {
 
   asteroid.asteroidList = astDist;
   if (astDist.length > 0) {
-    // distances for visualization
-    asteroid.toMoon = distanceToMoon / astDist[0].distance;
-    asteroid.canvasRepaint();
+    // Visualize closest asteroid by default
+    asteroid.toggleVisualization(0);
     // If Earth got hit by asteroid, nobody probably would read this anymore
     asteroid.message = `We missed destruction by mere ${astDist[0].distance.toLocaleString()} kilometers today!`
   } else {
