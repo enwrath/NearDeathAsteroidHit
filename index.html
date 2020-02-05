@@ -8,6 +8,7 @@
   <body>
     <div id="asteroid">
       <h1>Today, these asteroids are as close to Earth as their orbit allows:</h1>
+      <p>ToDo: Indicate selected asteroids...</p>
       <ul>
         <li v-for="(ast, index) in asteroidList" v-on:click="toggleVisualization(index)">
           <a v-bind:href="ast.link">{{ ast.name }}</a> is only {{ ast.distance.toLocaleString() }} km from colliding with Earth! {{ index }}
@@ -18,7 +19,8 @@
         <hr>
         {{ visList }}
         <p>Visualization of distance to asteroid with moon as the reference point. <br>
-        Celestial bodies not in scale. Celestial bodies also not perfectly lined up in reality.</p>
+        Celestial bodies not in scale. Celestial bodies also not perfectly lined up in reality.<br>
+        ToDo: make this scrollable to 10M+km distances work...</p>
         <canvas id="aCanvas"></canvas>
       </div>
     </div>
