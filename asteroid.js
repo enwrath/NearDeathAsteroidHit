@@ -4,6 +4,7 @@ var asteroid = new Vue({
   el: '#asteroid',
   data: {
     asteroidList: [],
+    visList: [],
     message: "Loading NASA asteroid data...",
     toMoon: 0,
     drawCanvas: null,
@@ -45,6 +46,16 @@ var asteroid = new Vue({
       this.drawCanvas.fillStyle = 'black';
       this.drawCanvas.fill();
       this.drawCanvas.fillText("Asteroid", aX-20, 55);
+    },
+    // Toggle visualization of asteroid[index]'s distance
+    toggleVisualization(index) {
+      let i = this.visList.indexOf(index);
+      if (i == -1) {
+        this.visList.push(index);
+      }
+      else {
+        this.visList.splice(i, 1);
+      }
     }
   },
   watch: {

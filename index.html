@@ -8,13 +8,14 @@
     <div id="asteroid">
       <h1>Today, these asteroids are as close to Earth as their orbit allows:</h1>
       <ul>
-        <li v-for="ast in asteroidList">
-          <a v-bind:href="ast.link">{{ ast.name }}</a> is only {{ ast.distance.toLocaleString() }} km from colliding with Earth!
+        <li v-for="(ast, index) in asteroidList" v-on:click="toggleVisualization(index)">
+          <a v-bind:href="ast.link">{{ ast.name }}</a> is only {{ ast.distance.toLocaleString() }} km from colliding with Earth! {{ index }}
         </li>
       </ul>
       <p> {{ message }} </p>
       <div v-show="toMoon > 0">
         <hr>
+        {{ visList }}
         <p>Visualization of distance to asteroid with moon as the reference point. <br>
         Celestial bodies not in scale.</p>
         <canvas id="aCanvas" height="75"></canvas>
