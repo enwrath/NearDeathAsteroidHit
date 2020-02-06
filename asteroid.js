@@ -6,21 +6,21 @@ var asteroid = new Vue({
     asteroidList: [],
     visList: [],
     message: "Loading NASA asteroid data...",
-    drawCanvas: null,
-    canvasWidth: 0
+    canvas: null,
+    ctx: null,
   },
   mounted: function() {
     loadData();
     let c = document.getElementById("aCanvas");
-    this.canvasWidth = c.scrollWidth;
-    c.width = this.canvasWidth;
+    c.width = c.scrollWidth;
     c.height = c.scrollHeight;
     let ctx = c.getContext("2d");
-    this.drawCanvas = ctx;
+    this.ctx = ctx;
+    this.canvas = c;
   },
   methods: {
     canvasRepaint() {
-      let mX = this.canvasWidth - 50;
+      let mX = 125;
       let maxDist = 0;
       let minDist = 25;
       let ax = 0;
@@ -28,39 +28,42 @@ var asteroid = new Vue({
       if (this.visList.length > 0) {
         // Asteroid with max index is furthest away
         let indexMax = Math.max(...this.visList);
-        // put it the end point of canvas
-        aX = this.canvasWidth - 50;
         maxDist = this.asteroidList[indexMax].distance
 
-        mX = aX * distanceToMoon / maxDist;
+        // We need this many pixels to fit everything in:
+        // Moon is 25px from earth, asteroid distance based on that
+        let canvasW = 100 * maxDist / distanceToMoon
+        // And another 50 pixels for padding, so names fit in canvas
+        canvasW += 100
+        this.canvas.width = canvasW;
+        this.canvas.scrollWidth = canvasW;
       }
 
 
-      this.drawCanvas.font = "12px Georgia";
-      this.drawCanvas.fillStyle = 'gray';
-      this.drawCanvas.fillRect(0, 0, this.canvasWidth, 100);
+      this.ctx.font = "12px Georgia";
+      this.ctx.clearRect(0, 0, this.canvas.width, 100);
 
 
       for (index in this.visList) {
-        let xPos = aX * this.asteroidList[this.visList[index]].distance / maxDist
-        this.drawCanvas.beginPath();
-        this.drawCanvas.arc(xPos, 25, 20, 0, 2 * Math.PI, false);
-        this.drawCanvas.fillStyle = 'black';
-        this.drawCanvas.fill();
-        this.drawCanvas.fillText(this.asteroidList[this.visList[index]].name, xPos-15, 55);
+        let xPos = 25 + 100 * this.asteroidList[this.visList[index]].distance / distanceToMoon
+        this.ctx.beginPath();
+        this.ctx.arc(xPos, 25, 20, 0, 2 * Math.PI, false);
+        this.ctx.fillStyle = 'black';
+        this.ctx.fill();
+        this.ctx.fillText(this.asteroidList[this.visList[index]].name, xPos-15, 55);
       }
 
-      this.drawCanvas.beginPath();
-      this.drawCanvas.arc(minDist, 25, 20, 0, 2 * Math.PI, false);
-      this.drawCanvas.fillStyle = 'green';
-      this.drawCanvas.fill();
-      this.drawCanvas.fillText("Earth", minDist-15, 55);
+      this.ctx.beginPath();
+      this.ctx.arc(minDist, 25, 20, 0, 2 * Math.PI, false);
+      this.ctx.fillStyle = 'green';
+      this.ctx.fill();
+      this.ctx.fillText("Earth", minDist-15, 55);
 
-      this.drawCanvas.beginPath();
-      this.drawCanvas.arc(mX, 25, 20, 0, 2 * Math.PI, false);
-      this.drawCanvas.fillStyle = 'white';
-      this.drawCanvas.fill();
-      this.drawCanvas.fillText("Moon", mX-15, 55);
+      this.ctx.beginPath();
+      this.ctx.arc(mX, 25, 20, 0, 2 * Math.PI, false);
+      this.ctx.fillStyle = 'white';
+      this.ctx.fill();
+      this.ctx.fillText("Moon", mX-15, 55);
 
     },
     // Toggle visualization of asteroid[index]'s distance
