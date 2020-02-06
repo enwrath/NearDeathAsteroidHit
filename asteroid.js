@@ -48,20 +48,20 @@ var asteroid = new Vue({
         let xPos = 25 + 100 * this.asteroidList[this.visList[index]].distance / distanceToMoon
         this.ctx.beginPath();
         this.ctx.arc(xPos, 25, 20, 0, 2 * Math.PI, false);
-        this.ctx.fillStyle = 'black';
+        this.ctx.fillStyle = '#947676';
         this.ctx.fill();
         this.ctx.fillText(this.asteroidList[this.visList[index]].name, xPos-15, 55);
       }
 
       this.ctx.beginPath();
       this.ctx.arc(minDist, 25, 20, 0, 2 * Math.PI, false);
-      this.ctx.fillStyle = 'green';
+      this.ctx.fillStyle = '#6f8e79';
       this.ctx.fill();
       this.ctx.fillText("Earth", minDist-15, 55);
 
       this.ctx.beginPath();
       this.ctx.arc(mX, 25, 20, 0, 2 * Math.PI, false);
-      this.ctx.fillStyle = 'white';
+      this.ctx.fillStyle = '#c5c7b3';
       this.ctx.fill();
       this.ctx.fillText("Moon", mX-15, 55);
 

@@ -5,3 +5,11 @@
 .selected {
 	background-color: #5bccea7d;
 }
+body {
+	background-color: black;
+	background-image: url("bg.jpg");
+	color: #a5d6e8;
+}
+footer {
+	color: #a5d6e8;
+}
