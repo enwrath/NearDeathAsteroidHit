@@ -108,8 +108,10 @@ function displayData(data, date) {
 
   asteroid.asteroidList = astDist;
   if (astDist.length > 0) {
-    // Visualize closest asteroid by default
-    asteroid.toggleVisualization(0);
+    // Visualize all asteroids by default
+    for (let i = 0; i < astDist.length; i++) {
+      asteroid.toggleVisualization(i);
+    }
     // If Earth got hit by asteroid, nobody probably would read this anymore
     asteroid.message = `We missed destruction by mere ${astDist[0].distance.toLocaleString()} kilometers today!`
   } else {
