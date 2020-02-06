@@ -8,10 +8,9 @@
   <body>
     <div id="asteroid">
       <h1>Today, these asteroids are as close to Earth as their orbit allows:</h1>
-      <p>ToDo: Indicate selected asteroids...</p>
       <ul>
-        <li v-for="(ast, index) in asteroidList" v-on:click="toggleVisualization(index)">
-          <a v-bind:href="ast.link">{{ ast.name }}</a> is only {{ ast.distance.toLocaleString() }} km from colliding with Earth! {{ index }}
+        <li v-for="(ast, index) in asteroidList" v-on:click="toggleVisualization(index)" v-bind:class="{ selected: visList.indexOf(index) != -1 }">
+          <a v-bind:href="ast.link">{{ ast.name }}</a> is only {{ ast.distance.toLocaleString() }} km from colliding with Earth!
         </li>
       </ul>
       <p> {{ message }} </p>
