@@ -8,9 +8,10 @@ var asteroid = new Vue({
     message: "Loading NASA asteroid data...",
     canvas: null,
     ctx: null,
+    failure: false
   },
   mounted: function() {
-    //loadData();
+    loadData();
     let c = document.getElementById("aCanvas");
     c.width = c.scrollWidth;
     c.height = c.scrollHeight;
@@ -25,6 +26,7 @@ var asteroid = new Vue({
       let radius = this.canvas.height / 4;
       let mX = 7 * minDist;
       // If no asteroid to visualize, moon is at the end
+      console.log("wtfff");
       if (this.visList.length > 0) {
         // Asteroid with max index is furthest away
         let indexMax = Math.max(...this.visList);
@@ -34,15 +36,17 @@ var asteroid = new Vue({
         let canvasW = mX * maxDist / distanceToMoon
         // And a bit more so names fit for sure in canvas
         canvasW += 100
-        this.canvas.width = canvasW;
-        this.canvas.scrollWidth = canvasW;
+        if (canvasW > this.canvas.width) {
+          this.canvas.width = canvasW;
+          this.canvas.scrollWidth = canvasW;
+        }
       }
 
 
       this.ctx.font = (minDist / 2).toString() + "px Georgia";
       this.ctx.clearRect(0, 0, this.canvas.width, 100);
 
-
+      console.log("33wtfff");
       for (index in this.visList) {
         let xPos = minDist + mX * this.asteroidList[this.visList[index]].distance / distanceToMoon
         this.ctx.beginPath();
@@ -51,7 +55,7 @@ var asteroid = new Vue({
         this.ctx.fill();
         this.ctx.fillText(this.asteroidList[this.visList[index]].name, xPos-radius, 3*radius);
       }
-
+      console.log("wtff53f");
       this.ctx.beginPath();
       this.ctx.arc(minDist, minDist, radius, 0, 2 * Math.PI, false);
       this.ctx.fillStyle = '#6f8e79';
@@ -63,7 +67,7 @@ var asteroid = new Vue({
       this.ctx.fillStyle = '#c5c7b3';
       this.ctx.fill();
       this.ctx.fillText("Moon", minDist+mX-radius, 3*radius);
-
+      console.log("wtff234234f");
     },
     // Toggle visualization of asteroid[index]'s distance
     toggleVisualization(index) {
@@ -94,6 +98,7 @@ function displayData(data) {
   // ToDo: Check that api version is same
   if (data.count <= 0) {
     asteroid.message = "No asteroids near Earth in the next 60 days. Or something went wrong..."
+    asteroid.failure = true;
     return
   }
   let astDist = [];

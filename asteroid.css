@@ -1,7 +1,6 @@
 #aCanvas {
   height: 6em;
 }
-
 .astDiv {
   display: inline-block;
   background-color: #2e48387d;
@@ -17,10 +16,31 @@
   background-color: #aee2c27d;
 }
 body {
+  padding-left: 5em;
 	background-color: black;
 	background-image: url("bg.jpg");
 	color: #a5d6e8;
 }
 footer {
+  text-align: center;
 	color: #a5d6e8;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+}
+#loader {
+  position: absolute;
+  margin-top: 10em;
+  margin-left: 35%;
+  margin-right: 35%;
+  border: 0.75em solid #5f5d5d;
+  border-right: 0.75em solid #68f784;
+  border-radius: 50%;
+  width: 3em;
+  height: 3em;
+  animation: spin 1.5s ease-in-out infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(720deg); }
 }

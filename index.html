@@ -7,18 +7,18 @@
   </head>
   <body>
     <div id="asteroid">
+      <div id="loader" v-show="!failure && asteroidList.length <= 0"></div>
       <div v-show="asteroidList.length > 0">
         <h1>Asteroids closest to Earth in the next 60 days:</h1>
         <div v-for="(ast, index) in asteroidList" v-on:click="toggleVisualization(index)" v-bind:class="{ selected: visList.indexOf(index) != -1 }" class="astDiv">
           Name: {{ ast.name }} <br>Distance: {{ ast.distance.toLocaleString() }} km <br>Date: {{ ast.date }} <br>Velocity: {{ast.speed }} km/s
         </div>
         <p>Click asteroid infoboxes above to toggle them. Selected asteroids' distance is visualized below.</p>
-        <canvas id="aCanvas"></canvas>
+      </div>
+      <canvas id="aCanvas"></canvas>
+      <div v-show="asteroidList.length > 0">
         <p>Note: celestial bodies not in scale. Celestial bodies also not perfectly lined up in reality.<br>
         Note: asteroids can be far away, so you may need to scroll a bit.</p>
-      </div>
-      <div v-show="asteroidList.length <= 0">
-        <p>{{ message }}</p>
       </div>
     </div>
     <script src="asteroid.js"></script>
