@@ -2,8 +2,16 @@
   height: 6em;
 }
 
+.astDiv {
+  display: inline-block;
+  background-color: #2e48387d;
+  padding: 1em;
+  border: 0.5em solid #000000;
+  border-radius: 25px;
+  width: 15em;
+}
 .selected {
-	background-color: #5bccea7d;
+	background-color: #8cd8a97d;
 }
 body {
 	background-color: black;
