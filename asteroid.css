@@ -13,6 +13,9 @@
 .selected {
 	background-color: #8cd8a97d;
 }
+.astDiv:hover {
+  background-color: #aee2c27d;
+}
 body {
 	background-color: black;
 	background-image: url("bg.jpg");
