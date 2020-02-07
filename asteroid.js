@@ -10,7 +10,7 @@ var asteroid = new Vue({
     ctx: null,
   },
   mounted: function() {
-    loadData();
+    //loadData();
     let c = document.getElementById("aCanvas");
     c.width = c.scrollWidth;
     c.height = c.scrollHeight;
@@ -23,8 +23,7 @@ var asteroid = new Vue({
       let maxDist = 0;
       let minDist = this.canvas.height / 3;
       let radius = this.canvas.height / 4;
-      let mX = 4 * minDist;
-      let ax = 0;
+      let mX = 7 * minDist;
       // If no asteroid to visualize, moon is at the end
       if (this.visList.length > 0) {
         // Asteroid with max index is furthest away
@@ -60,10 +59,10 @@ var asteroid = new Vue({
       this.ctx.fillText("Earth", minDist-radius, 3*radius);
 
       this.ctx.beginPath();
-      this.ctx.arc(mX, minDist, radius, 0, 2 * Math.PI, false);
+      this.ctx.arc(minDist + mX, minDist, radius, 0, 2 * Math.PI, false);
       this.ctx.fillStyle = '#c5c7b3';
       this.ctx.fill();
-      this.ctx.fillText("Moon", mX-radius, 3*radius);
+      this.ctx.fillText("Moon", minDist+mX-radius, 3*radius);
 
     },
     // Toggle visualization of asteroid[index]'s distance
@@ -94,7 +93,7 @@ function loadData() {
 function displayData(data) {
   // ToDo: Check that api version is same
   if (data.count <= 0) {
-    asteroid.message = "No asteroids are coming close to Earth in the next 60 days. Or something went wrong fetching data."
+    asteroid.message = "No asteroids near Earth in the next 60 days. Or something went wrong..."
     return
   }
   let astDist = [];
@@ -112,6 +111,4 @@ function displayData(data) {
   for (let i = 0; i < astDist.length; i++) {
     asteroid.toggleVisualization(i);
   }
-  // If Earth got hit by asteroid, nobody probably would read this anymore
-  asteroid.message = `We missed destruction by mere ${astDist[0].distance.toLocaleString()} kilometers today!`
 }

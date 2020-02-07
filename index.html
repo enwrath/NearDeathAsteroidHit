@@ -7,22 +7,23 @@
   </head>
   <body>
     <div id="asteroid">
-      <h1>Asteroids closest to Earth in the next 60 days:</h1>
+      <div v-show="asteroidList.length > 0">
+        <h1>Asteroids closest to Earth in the next 60 days:</h1>
         <div v-for="(ast, index) in asteroidList" v-on:click="toggleVisualization(index)" v-bind:class="{ selected: visList.indexOf(index) != -1 }" class="astDiv">
-          {{ ast.name }} <br>Distance: {{ ast.distance.toLocaleString() }} km <br>Date: {{ ast.date }} <br>Velocity: {{ast.speed }} km/s
+          Name: {{ ast.name }} <br>Distance: {{ ast.distance.toLocaleString() }} km <br>Date: {{ ast.date }} <br>Velocity: {{ast.speed }} km/s
         </div>
-      <p> {{ message }} </p>
-      <div>
-        <p>Visualization of distance to asteroid with moon as the reference point. <br>
-        Celestial bodies not in scale. Celestial bodies also not perfectly lined up in reality.<br>
-        Note: asteroids can be far away, so you may need to scroll a bit. <br>
-        Only highlighted asteroid on the list above will be drawn. Click list items to toggle them.</p>
+        <p>Click asteroid infoboxes above to toggle them. Selected asteroids' distance is visualized below.</p>
         <canvas id="aCanvas"></canvas>
+        <p>Note: celestial bodies not in scale. Celestial bodies also not perfectly lined up in reality.<br>
+        Note: asteroids can be far away, so you may need to scroll a bit.</p>
+      </div>
+      <div v-show="asteroidList.length <= 0">
+        <p>{{ message }}</p>
       </div>
     </div>
     <script src="asteroid.js"></script>
   </body>
   <footer>
-    <p>Data used is from <a href="https://api.nasa.gov/">NASA API</a>. Background image by <a href="https://pixabay.com/users/SauerC-556582/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1213455">Christoph Sauer</a> from <a href="https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1213455">Pixabay</a></p>
+    <p>Data used is from <a href="https://ssd-api.jpl.nasa.gov/doc/cad.html">NASA API</a>. Background image by <a href="https://pixabay.com/users/SauerC-556582/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1213455">Christoph Sauer</a> from <a href="https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1213455">Pixabay</a></p>
   <footer>
 </html>
