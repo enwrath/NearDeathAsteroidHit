@@ -81,40 +81,37 @@ var asteroid = new Vue({
 })
 
 function loadData() {
-  // Might not give right day if timezones and stuff, but whatever
-  const date = new Date().toISOString().slice(0,10);
-  // Supersecret apikey, pls no steal ;______;
-  const apikey = '0nvq8nAqwKq9EtUBqyS7lL5dHv3A3O2YKhIaS86V'
-
-  url = `https://api.nasa.gov/neo/rest/v1/feed?start_date=${date}&end_date=${date}&api_key=${apikey}`
+  const url = 'https://ssd-api.jpl.nasa.gov/cad.api?dist-max=10LD&date-min=now&sort=dist'
   fetch(url)
   .then((response) => {
     return response.json();
   })
   .then((jsonData) => {
-    displayData(jsonData, date);
+    displayData(jsonData);
   });
 
 }
-function displayData(data, date) {
-  let asteroids = data.near_earth_objects[date];
+function displayData(data) {
+  // ToDo: Check that api version is same
+  if (data.count <= 0) {
+    asteroid.message = "No asteroids are coming close to Earth in the next 60 days. Or something went wrong fetching data."
+    return
+  }
   let astDist = [];
 
-  for (a in asteroids) {
-    astDist.push({name:asteroids[a].name, distance:Math.round(asteroids[a].close_approach_data[0].miss_distance.kilometers), link:asteroids[a].nasa_jpl_url});
+  for (a in data.data) {
+    astDist.push({name: data.data[a][0],
+      distance: Math.round(data.data[a][4] * 149597871),
+      speed: parseFloat(data.data[a][7]).toFixed(2),
+      date: new Date(data.data[a][3]).toISOString().slice(0,10)
+    });
   }
-
-  astDist.sort((n1,n2) => n1.distance - n2.distance);
 
   asteroid.asteroidList = astDist;
-  if (astDist.length > 0) {
-    // Visualize all asteroids by default
-    for (let i = 0; i < astDist.length; i++) {
-      asteroid.toggleVisualization(i);
-    }
-    // If Earth got hit by asteroid, nobody probably would read this anymore
-    asteroid.message = `We missed destruction by mere ${astDist[0].distance.toLocaleString()} kilometers today!`
-  } else {
-    asteroid.message = 'No asteroids reached their closest-to-earth point today. Or something went wrong.'
+  // Visualize all asteroids by default
+  for (let i = 0; i < astDist.length; i++) {
+    asteroid.toggleVisualization(i);
   }
+  // If Earth got hit by asteroid, nobody probably would read this anymore
+  asteroid.message = `We missed destruction by mere ${astDist[0].distance.toLocaleString()} kilometers today!`
 }
