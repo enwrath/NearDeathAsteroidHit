@@ -20,9 +20,10 @@ var asteroid = new Vue({
   },
   methods: {
     canvasRepaint() {
-      let mX = 125;
       let maxDist = 0;
-      let minDist = 25;
+      let minDist = this.canvas.height / 3;
+      let radius = this.canvas.height / 4;
+      let mX = 4 * minDist;
       let ax = 0;
       // If no asteroid to visualize, moon is at the end
       if (this.visList.length > 0) {
@@ -31,39 +32,38 @@ var asteroid = new Vue({
         maxDist = this.asteroidList[indexMax].distance
 
         // We need this many pixels to fit everything in:
-        // Moon is 25px from earth, asteroid distance based on that
-        let canvasW = 100 * maxDist / distanceToMoon
-        // And another 50 pixels for padding, so names fit in canvas
+        let canvasW = mX * maxDist / distanceToMoon
+        // And a bit more so names fit for sure in canvas
         canvasW += 100
         this.canvas.width = canvasW;
         this.canvas.scrollWidth = canvasW;
       }
 
 
-      this.ctx.font = "12px Georgia";
+      this.ctx.font = (minDist / 2).toString() + "px Georgia";
       this.ctx.clearRect(0, 0, this.canvas.width, 100);
 
 
       for (index in this.visList) {
-        let xPos = 25 + 100 * this.asteroidList[this.visList[index]].distance / distanceToMoon
+        let xPos = minDist + mX * this.asteroidList[this.visList[index]].distance / distanceToMoon
         this.ctx.beginPath();
-        this.ctx.arc(xPos, 25, 20, 0, 2 * Math.PI, false);
+        this.ctx.arc(xPos, minDist, radius, 0, 2 * Math.PI, false);
         this.ctx.fillStyle = '#947676';
         this.ctx.fill();
-        this.ctx.fillText(this.asteroidList[this.visList[index]].name, xPos-15, 55);
+        this.ctx.fillText(this.asteroidList[this.visList[index]].name, xPos-radius, 3*radius);
       }
 
       this.ctx.beginPath();
-      this.ctx.arc(minDist, 25, 20, 0, 2 * Math.PI, false);
+      this.ctx.arc(minDist, minDist, radius, 0, 2 * Math.PI, false);
       this.ctx.fillStyle = '#6f8e79';
       this.ctx.fill();
-      this.ctx.fillText("Earth", minDist-15, 55);
+      this.ctx.fillText("Earth", minDist-radius, 3*radius);
 
       this.ctx.beginPath();
-      this.ctx.arc(mX, 25, 20, 0, 2 * Math.PI, false);
+      this.ctx.arc(mX, minDist, radius, 0, 2 * Math.PI, false);
       this.ctx.fillStyle = '#c5c7b3';
       this.ctx.fill();
-      this.ctx.fillText("Moon", mX-15, 55);
+      this.ctx.fillText("Moon", mX-radius, 3*radius);
 
     },
     // Toggle visualization of asteroid[index]'s distance
