@@ -26,7 +26,6 @@ var asteroid = new Vue({
       let radius = this.canvas.height / 4;
       let mX = 7 * minDist;
       // If no asteroid to visualize, moon is at the end
-      console.log("wtfff");
       if (this.visList.length > 0) {
         // Asteroid with max index is furthest away
         let indexMax = Math.max(...this.visList);
@@ -46,7 +45,6 @@ var asteroid = new Vue({
       this.ctx.font = (minDist / 2).toString() + "px Georgia";
       this.ctx.clearRect(0, 0, this.canvas.width, 100);
 
-      console.log("33wtfff");
       for (index in this.visList) {
         let xPos = minDist + mX * this.asteroidList[this.visList[index]].distance / distanceToMoon
         this.ctx.beginPath();
@@ -55,7 +53,6 @@ var asteroid = new Vue({
         this.ctx.fill();
         this.ctx.fillText(this.asteroidList[this.visList[index]].name, xPos-radius, 3*radius);
       }
-      console.log("wtff53f");
       this.ctx.beginPath();
       this.ctx.arc(minDist, minDist, radius, 0, 2 * Math.PI, false);
       this.ctx.fillStyle = '#6f8e79';
@@ -67,7 +64,6 @@ var asteroid = new Vue({
       this.ctx.fillStyle = '#c5c7b3';
       this.ctx.fill();
       this.ctx.fillText("Moon", minDist+mX-radius, 3*radius);
-      console.log("wtff234234f");
     },
     // Toggle visualization of asteroid[index]'s distance
     toggleVisualization(index) {
@@ -107,7 +103,7 @@ function displayData(data) {
     astDist.push({name: data.data[a][0],
       distance: Math.round(data.data[a][4] * 149597871),
       speed: parseFloat(data.data[a][7]).toFixed(2),
-      date: new Date(data.data[a][3]).toISOString().slice(0,10)
+      date: new Date(data.data[a][3].replace(/-/g," ")).toISOString().slice(0,10)
     });
   }
 
